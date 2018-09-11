@@ -1,0 +1,1 @@
+New-SelfSignedCertificate -certstorelocation cert:\localmachine\my -dnsname "xp902-ce-auth"

@@ -1,0 +1,160 @@
+// ------------------------------------------------------------------------------------------------------ //
+//         Sitecore Install Framework - Commerce Single Server Configuration                              //
+//                                                                                                        //
+//  Run this configuration to install a single instance of Commerce Engine and Sitecore Storefront Site.  //
+//																										  //
+//                                                                                                        //
+//  NOTE: Only single line comments are accepted in configurations.                                       //
+// ------------------------------------------------------------------------------------------------------ //
+
+
+{
+  "Parameters": {
+    // Parameters are values that may be passed when Install-SitecoreConfiguration is called.
+    // Parameters must declare a Type and may declare a DefaultValue and Description.
+    // Parameters with no DefaultValue are required when Install-SitecoreConfiguration is called.
+    "SiteName": {
+      "Type": "string",
+      "Description": "The name of the site to be deployed."
+    },
+    "SiteHostHeaderName": {
+      "Type": "string",
+      "Description": "The host header name of the site to be deployed."
+    },
+    "CertificateName": {
+      "Type": "string",
+      "Description": "The name of the certificate to be created."
+    },
+    "CommerceServicesDbServer": {
+      "Type": "string",
+      "DefaultValue": ".\\SQLSERVER",
+      "Description": "The Commerce Engine database server name."
+    },
+    "CommerceServicesDbName": {
+      "Type": "string",
+      "DefaultValue": "SitecoreCommerce9_SharedEnvironments",
+      "Description": "The Commerce Engine database name."
+    },
+    "CommerceServicesGlobalDbName": {
+      "Type": "string",
+      "DefaultValue": "SitecoreCommerce9_Global",
+      "Description": "The Commerce Engine global database name"
+    },
+    "CommerceServicesPostfix": {
+      "Type": "string",
+      "DefaultValue": "Sc9",
+      "Description": "The Commerce Engine postfix for services names"
+    },
+    "SitecoreDbServer": {
+      "Type": "string",
+      "DefaultValue": ".\\SQLSERVER",
+      "Description": "The Sitecore database server name."
+    },
+    "CommerceSearchProvider": {
+      "Type": "string",
+      "DefaultValue": "SOLR",
+      "Description": "The search provider used for the Commerce Engine - Accepted values are 'SOLR' and 'AZURE'"
+    },
+    "SolrUrl": {
+      "Type": "string",
+      "DefaultValue": "https://localhost:8983/solr",
+      "Description": "The Solr instance url."
+    },
+    "SolrRoot": {
+      "Type": "string",
+      "DefaultValue": "c:\\solr-6.6.2",
+      "Description": "The file path to the Solr instance."
+    },
+    "SolrService": {
+      "Type": "string",
+      "DefaultValue": "Solr-6.6.2",
+      "Description": "The name of the Solr service."
+    },
+    "SolrSchemas": {
+      "Type": "string",
+      "DefaultValue": "",
+      "Description": "The path to Solr schemas."
+    },
+    "SearchIndexPrefix": {
+      "Type": "string",
+      "DefaultValue": "",
+      "Description": "The prefix for indexes or cores."
+    },
+    "AzureSearchServiceName": {
+      "Type": "string",
+      "DefaultValue": "",
+      "Description": "The Azure search service name. Requires param CommerceSearchProvider to be set to 'AZURE'"
+    },
+    "AzureSearchAdminKey": {
+      "Type": "string",
+      "DefaultValue": "",
+      "Description": "The Azure search service admin key. Requires param CommerceSearchProvider to be set to 'AZURE'"
+    },
+    "AzureSearchQueryKey": {
+      "Type": "string",
+      "DefaultValue": "",
+      "Description": "The Azure search service query key. Requires param CommerceSearchProvider to be set to 'AZURE'"
+    },
+    "SitecoreBizFxServicesContentPath": {
+      "Type": "string",
+      "Description": "SitecoreBizFx Services Content Path"
+    },
+    "UserAccount": {
+      "Type": "psobject",
+      "Description": "UserAccount for Commerce Serices App Pool"
+    },
+    "CommerceEngineCertificatePath": {
+      "Type": "string",
+      "Description": "Commerce Engile certificate full path"
+    },
+    "MergeToolFullPath": {
+      "Type": "string",
+      "Description": "The Merge Tool full path"
+    },
+    "SitecoreIdentityServerName": {
+      "Type": "string",
+      "Description": "Sitecore Identity Server name",
+      "DefaultValue": "SitecoreIdentityServer"
+    },
+    "CommerceAuthoringServicesPort": {
+			"Type": "string",
+			"Description": "Commerce Authoring Services port"
+    },
+    "CommerceAuthoringService": {
+			"Type": "string",
+			"Description": "Commerce Authoring Service URI"
+    },
+    "CommerceIdService": {
+			"Type": "string",
+			"Description": "Commerce Id Service URI"
+    },
+    "CommerceBizFxService": {
+			"Type": "string",
+			"Description": "Commerce BizFx Service URI"
+    }
+  },
+  "Variables": {
+    // Variables are values calculated in a configuration.
+    // They can reference Parameters, other Variables, and config functions.
+  },
+  "Modules": [ "InstallSitecoreConfiguration", "ManageCommerceService", "SitecoreUtilityTasks" ],
+  "Tasks": {
+    // Tasks are separate units of work in a configuration.
+    // Each task is an action that will be completed when Install-SitecoreConfiguration is called.
+    // By default, tasks are applied in the order they are declared.
+    // Tasks may reference Parameters, Variables, and config functions.
+    "DeploySitecoreBizFx": {
+      "Type": "InstallSitecoreConfiguration",
+      "Params": {
+        "Path": ".\\Configuration\\Commerce\\SitecoreBizFx\\SitecoreBizFx.json",
+        "SitecoreBizFxServicesContentPath": "[parameter('SitecoreBizFxServicesContentPath')]",
+        "CommerceAuthoringServicesPort": "[parameter('CommerceAuthoringServicesPort')]",
+        "UserAccount": "[parameter('UserAccount')]",
+        "CommerceAuthoringService": "[parameter('CommerceAuthoringService')]",
+        "CommerceIdService": "[parameter('CommerceIdService')]",
+        "CommerceBizFxService": "[parameter('CommerceBizFxService')]"
+        
+      }
+    }
+  }
+}

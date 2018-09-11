@@ -1,0 +1,53 @@
+// ------------------------------------------------------------------------------------------------------ //
+//         Sitecore Install Framework - Commerce Single Server Configuration                              //
+//                                                                                                        //
+//  Run this configuration to install a single instance of Commerce Engine and Sitecore Storefront Site.  //
+//																										  //
+//                                                                                                        //
+//  NOTE: Only single line comments are accepted in configurations.                                       //
+// ------------------------------------------------------------------------------------------------------ //
+
+
+{
+  "Parameters": {
+    // Parameters are values that may be passed when Install-SitecoreConfiguration is called.
+    // Parameters must declare a Type and may declare a DefaultValue and Description.
+    // Parameters with no DefaultValue are required when Install-SitecoreConfiguration is called.
+
+    "SiteHostHeaderName": {
+      "Type": "string",
+      "Description": "The host header name of the site to be deployed."
+    },
+    "InstallDir": {
+      "Type": "string",
+      "Description": "The sitecore site content path."
+    }
+  },
+  "Variables": {
+    // Variables are values calculated in a configuration.
+    // They can reference Parameters, other Variables, and config functions.
+    "UtilitiesBaseUrl": "[concat('https://', concat(parameter('SiteHostHeaderName'), '/SiteUtilityPages'))]",
+    "EngineConnectIncludeDir": "[concat(parameter('InstallDir'), '\\App_Config\\Include\\Y.Commerce.Engine')]"
+  },
+  "Modules": [ "InstallSitecoreConfiguration", "ManageCommerceService", "SitecoreUtilityTasks" ],
+  "Tasks": {
+    // Tasks are separate units of work in a configuration.
+    // Each task is an action that will be completed when Install-SitecoreConfiguration is called.
+    // By default, tasks are applied in the order they are declared.
+    // Tasks may reference Parameters, Variables, and config functions.  
+    "EnableCEConnectDataProvider": {
+      "Type": "InstallSitecoreConfiguration",
+      "Params": {
+        "Path": ".\\Configuration\\Commerce\\CEConnect\\EnableCEConnectDataProvider.json",
+        "ConfigDir": "[variable('EngineConnectIncludeDir')]"
+      }
+    },
+    "GenerateCatalogTemplates": {
+      "Type": "InstallSitecoreConfiguration",
+      "Params": {
+        "Path": ".\\Configuration\\Commerce\\CEConnect\\GenerateCatalogTemplates.json",
+        "BaseUrl": "[variable('UtilitiesBaseUrl')]"
+      }
+    }
+  }
+}
